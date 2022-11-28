@@ -86,6 +86,14 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
+  
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+      token: "28a8b15f7fac47859d4681fec2ee697c"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
 
   <script>
     let form = document.querySelector('form');
@@ -95,13 +103,201 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      //output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try
+      {
+        output.innerHTML = outputOpt(firstNum, secondNum, operator);
+      }
+      catch (err)
+      {
+        console.log('Sadly an error occurred');
+        console.error(err.message);
+        console.error(err.name);
+        console.error(err.stack);
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', consoleLog);
+    errorBtns[1].addEventListener('click', consoleError);
+    errorBtns[2].addEventListener('click', consoleCount);
+    errorBtns[3].addEventListener('click', consoleWarn);
+    errorBtns[4].addEventListener('click', consoleAssert);
+    errorBtns[5].addEventListener('click', consoleClear);
+    errorBtns[6].addEventListener('click',consoleDir);
+    errorBtns[7].addEventListener('click',consoleDirXML);
+    errorBtns[8].addEventListener('click', consoleGroupS);
+    errorBtns[9].addEventListener('click', consoleGroupE);
+    errorBtns[10].addEventListener('click',consoleTable);
+    errorBtns[11].addEventListener('click',timerStart);
+    errorBtns[12].addEventListener('click',timerEnd);
+    errorBtns[13].addEventListener('click',consoleTrace);
+    errorBtns[14].addEventListener('click', globalError);
+
+    TrackJS.track('Testing TrackJS!');
+    
+    window.onerror = function(message, url, lineNumber)
+    {
+      console.log('Global error: Sadly an error has occurred :( ');
+      console.error(`${url}`);
+    }
+
+    try
+    {
+      var alertBut = errorBtns[15];  
+
+      if (15 > errorBtns.length - 1)
+      {
+        throw new Error("Array index out of bounds, index value is not within the length of the array.");
+      }
+    }
+    catch (err)
+    {
+      console.log('Sadly an error occurred');
+      console.error(err);
+    }
+
+    try
+    {
+      errorBtns[15].addEventListener('click', conAlert);
+    }
+    catch (err)
+    {
+      console.log('Sadly an error occurred');
+      console.error(err);
+    }
+    finally
+    {
+      console.log('Finally: Console Alert Demo');
+      //conAlert();
+    }
+    
+    class OperatorValidation extends Error
+    {
+      constructor(message)
+      {
+        super(message);
+        this.name = "OperatorValidation";
+      }
+    }
+
+    function outputOpt(val1, val2, opt)
+    {
+      if(!Number.isInteger(val1) || !Number.isInteger(val2))
+      {
+        throw new OperatorValidation('At least one of the inputs is not the data type - Integer');
+      }
+
+      return eval(`${val1} ${opt} ${val2}`);
+    }
+
+    /*
+    window.addEventListener("error", (event) =>{
+      console.error("Console error: ", event);
+    });
+    */
+
+    function conAlert()
+    {
+      alert('Alert Demo');
+    }
+
+    function consoleLog()
+    {
+      console.log('Console Log Demo');
+    }
+    function consoleError()
+    {
+      console.error('Console Error Demo');
+    }
+    function consoleCount()
+    {
+      console.count('Count Button: ');
+    }
+    function consoleWarn() 
+    {
+      console.warn('Console Warn Button');
+    }
+    function consoleAssert() 
+    {
+      var number = 2;
+      const errMsg = 'The number does not equal 3';
+      console.assert(number == 3, {number, errMsg});
+    }
+    function consoleClear()
+    {
+      count = 0;
+      console.clear();
+    }
+    function consoleDir()
+    {
+      console.dir(errorBtns[6]);
+    }
+    function consoleDirXML()
+    {
+      console.dirxml(errorBtns[6]);
+    }
+    function consoleGroupS()
+    {
+      console.group();
+    }
+    function consoleGroupE()
+    {
+      console.groupEnd();
+    }
+    function consoleTable()
+    {
+      var courses = [ 
+      {
+        name : "Software Engineering",
+        number : "110",
+      },
+
+      {
+        name : "Web Client Languages",
+        number : "134b",
+      },
+
+      {
+        name : "Advanced Software Engineering",
+        number : "112",
+      }
+    ];
+      console.table(courses);
+    }
+    function timerStart()
+    {
+      console.time();
+    }
+    function timerEnd()
+    {
+      console.timeEnd();
+    }
+    function deepest()
+    {
+      console.trace();
+    }
+    function globalError()
+    {
+      boom++;
+    }
+
+
+    function consoleTrace()
+    {
+      deep(); 
+    }
+    function deep()
+    {
+      deeper();
+    }
+    function deeper()
+    {
+      deepest();
+    }
+
   </script>
 </body>
 
